@@ -1,0 +1,22 @@
+Hangman game
+
+Find a dataset / api that contains words in 4, 5, 6, etc letters
+- Start with just a four letter word
+
+Setup variables
+
+Randomly pick a word from chosen dataset, parse the letters
+Set up an active time once the game starts
+Show empty character spots
+Prompt user to pick a letter (set to lowercase when input)
+Update variables when a pick is wrong and total picks
+
+After game is done:
+ - If player loses, print out the final word
+ - If player wins, print out total picks and total time taken
+
+
+##### 2nd part of implementation ####
+- Create a database leader board
+- Have user enter their name before playing
+- Output the top 10 scores after printing out the user's info from their game
