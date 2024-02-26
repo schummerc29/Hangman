@@ -1,6 +1,9 @@
 import reader
+import functions
+import time
+import sqlite3
 
-final = reader.randomize_word()
+final = reader.random_word()
 tries = 10
 guesses = 0
 
@@ -10,15 +13,15 @@ wordList = list(word)
 playerWord = "_"*len(word)
 playerWordList = list(playerWord)
 
+player = input("Please enter your name: ")
+
 while True:
+    time_start = time.time()
     s = ''
     word = s.join(playerWordList)
     print(f"Current word: {word}")
 
-    try:
-        pick = input("Please pick a letter: ")
-    except TypeError:
-        print("Please provide a valid input")
+    pick = functions.input_check()
     
     print(f"You picked: {pick}")
     counter = 0
@@ -26,7 +29,7 @@ while True:
 
     for letter in wordList:
         if pick.lower() == letter.lower():
-            playerWordList[index] = pick
+            playerWordList[index] = pick.lower()
             index += 1
             counter += 1
         else:
@@ -48,9 +51,22 @@ while True:
                 print(f"You have {tries} try left!")
             if tries == 0:
                 print("You're all out of attempts!")
-                print(f"The correct answer was '{word}'!")
+                print(f"The correct answer was '{final}'!")
                 break
     else:
+        time_stop = time.time()
+        total = time_stop - time_start
         word = s.join(playerWordList)
-        print(f"You've won! The correct answer is {word.upper()} and it took you {guesses} guesses!") 
-        break    
+        print(f"You've won! The correct answer is {final.upper()} and it took you {guesses} guesses!") 
+        
+   
+        sqliteConnection = sqlite3.connect('leaderboards.db')
+        cursor = sqliteConnection.cursor()
+        insert = f'''INSERT INTO Leaderboard (Player, Word, Guesses, Time) 
+                    VALUES ('{player}', '{word.upper()}', {guesses}, {total});'''
+        cursor.execute(insert)
+        sqliteConnection.commit()
+        cursor.close()
+        break  
+
+    
